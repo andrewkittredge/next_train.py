@@ -15,9 +15,6 @@ BACK_BAY_TAG = 'place-bbsta'
 
 PREDICTION_URL = 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&s=%(stop_tag)s&r=%(route_tag)s'
 
-#PREDICTION_URL = 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=39&s=22365&useShortTitles=true'
-
-
 def get_params():
     try:
         route, direction, stop =sys.argv[1:4]
