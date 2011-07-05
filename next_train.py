@@ -25,40 +25,21 @@ def get_params():
 
     return route, direction, stop
 
-def title_and_times_bus_xpath(stream):
+def title_and_times_xpath(stream):
+    tree = etree.parse(stream)
 
     route = tree.xpath('//@routeTitle')[0]
     stop = tree.xpath('//@stopTitle')[0]
-    direction = tree.xpath('//direction/@title')[0]
 
     predicted_arrival_minutes = tree.xpath('//@minutes')
 
-    return route, direction, stop, predicted_arrival_minutes
+    return route, stop, predicted_arrival_minutes
 
-def title_and_times_t_xpath(xpath):
-    tree = etree.parse(stream)
-
+def print_title_and_times(route, stop, predicted_arrival_minutes):
     
-
-def print_title_and_times(route, 
-                          direction, 
-                          stop, 
-                          predicted_arrival_minutes):
-    
-    print 'Predicted arrivals for Route %s to %s  @ %s' % (route, 
-                                                           direction, 
-                                                           stop)
+    print 'Predicted arrivals for Route %s @ %s' % (route, stop)
 
     print '\n'.join(predicted_arrival_minutes)
-
-def decide_prediction_source(_args):
-
-    if _args.indicate == 't':
-        prediction_getter = get_prediction_t_args
-    if _args.indicate == 'bus':
-        prediction_getter = get_prediction_bus_args
-
-    return prediction_getter(_args)
 
 def main():
 
@@ -71,8 +52,8 @@ def main():
 
     prediction_url = PREDICTION_URL % tags
     print prediction_url
-    prediction_tree = etree.parse(urllib.urlopen(prediction_url))
-    prediction_attributes = title_and_times_bus_xpath(prediction_tree)
+    prediction_stream = urllib.urlopen(prediction_url)
+    prediction_attributes = title_and_times_xpath(prediction_stream)
 
     print_title_and_times(*prediction_attributes)
     
